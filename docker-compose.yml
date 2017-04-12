@@ -1,0 +1,21 @@
+version: '2'
+services:
+  db:
+    image: postgres
+    hostname: db
+    ports:
+      - "5432:5432"
+  web:
+    build: .
+    hostname: web
+    # uncomment this for runserver...
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    # set up links so that web knows about db, rabbit and redis
+    links:
+      - db
+    depends_on:
+      - db
