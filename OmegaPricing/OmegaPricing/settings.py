@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-
+import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -80,13 +80,21 @@ WSGI_APPLICATION = 'OmegaPricing.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
+LOCAL_DB_IP = os.environ.get('DB_1_PORT_5432_TCP_ADDR', 'db')
+DATABASE_USER = os.environ.get('DATABASE_USER', 'postgres')
+DATABASE_PASSWORD = os.environ.get('DATABASE_PASSWORD', 'postgres')
+DATABASE_NAME = os.environ.get('DATABASE_NAME', 'postgres')
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': dj_database_url.config(
+        # default='postgis://postgres:postgres@{0}/postgres'.format(LOCAL_DB_IP)
+        default='postgis://{user}:{password}@{address}/{name}'.format(
+            user=DATABASE_USER, password=DATABASE_PASSWORD,
+            address=LOCAL_DB_IP, name=DATABASE_NAME
+        )
+    )
 }
+DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
 
 
 # Password validation
@@ -126,3 +134,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Omega settings
+OMEGA_API_KEY = os.getenv('OMEGA_API_KEY', 'abc123key')  # bit of a short cut here
+OMEGA_PRCICING_URL = os.getenv('OMEGA_PRCICING_URL', 'https://omegapricinginc.com/pricing/records.json()')

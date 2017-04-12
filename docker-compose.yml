@@ -9,7 +9,7 @@ services:
     build: .
     hostname: web
     # uncomment this for runserver...
-    command: python manage.py runserver 0.0.0.0:8000
+    command: ./run_web.sh
     volumes:
       - .:/code
     ports:
