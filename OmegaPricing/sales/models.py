@@ -25,7 +25,7 @@ class ProductManager(models.Manager):
                 percentage_change = percentage_change / existing_product.price_in_pennies
                 percentage_change = percentage_change * 100
 
-                # could maybe make sure these actions are atomic but for simplicities sake I am not.
+                # could maybe make sure these updates/saves are atomic but for simplicities sake I am not.
                 PastPriceRecord.objects.create(
                     product=existing_product,
                     price_in_pennies=existing_product.price_in_pennies,

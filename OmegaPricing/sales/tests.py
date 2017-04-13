@@ -7,6 +7,11 @@ from sales.models import Product, PastPriceRecord
 
 
 class SalesTests(APITestCase):
+    """
+    Simple test suite. Normally I would be much more thourough (testing bad requests from the
+    3rd party API, etc, but I had assumed that showing an understanding of mocking objects/api
+    requests were the meat of what you might be looking for.)
+    """
 
     url_update_sales_records = reverse('updateSales')
 
