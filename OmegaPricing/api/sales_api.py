@@ -26,7 +26,6 @@ class GetUpdatedSalesRecords(views.APIView):
         }
 
     def get(self, request, *args, **kwargs):
-
         url = settings.OMEGA_PRCICING_URL
         payload = self.get_payload()
         omega_response = requests.get(url, params=payload)
