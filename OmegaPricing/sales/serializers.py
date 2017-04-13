@@ -1,12 +1,4 @@
 from rest_framework import serializers
-from sales.models import Product
-
-
-class ProductSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Product
-        fields = ('name', 'external_product_id', 'price_in_pennies')
 
 
 class OmegaProductSerializer(serializers.Serializer):
@@ -18,5 +10,5 @@ class OmegaProductSerializer(serializers.Serializer):
     category = serializers.CharField()
 
     def validate_price(self, value):
-        value = int(round(float(value.strip('$'))*100))
+        value = round(float(value.strip('$'))*100)
         return value

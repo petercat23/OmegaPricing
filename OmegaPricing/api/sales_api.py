@@ -6,6 +6,10 @@ from rest_framework.response import Response
 
 from sales.serializers import OmegaProductSerializer
 from sales.models import Product
+from sales.exceptions import ProductMisMatch
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 # one could argue that this should be a POST request
@@ -22,12 +26,10 @@ class GetUpdatedSalesRecords(views.APIView):
         }
 
     def get(self, request, *args, **kwargs):
-        print("here")
 
         url = settings.OMEGA_PRCICING_URL
         payload = self.get_payload()
         omega_response = requests.get(url, params=payload)
-        print(omega_response)
 
         data = omega_response.json()
 
@@ -41,15 +43,11 @@ class GetUpdatedSalesRecords(views.APIView):
                 status=status.HTTP_404_NOT_FOUND)
 
         for record in product_records:
-            try:
-                product = Product.objects.get(external_product_id=record['id'])
-                serializer = OmegaProductSerializer(product, data=record)
-            except Product.DoesNotExist:
-                print(data)
-                serializer = OmegaProductSerializer(data=record)
-
+            serializer = OmegaProductSerializer(data=record)
             serializer.is_valid(raise_exception=True)
-
-            # get Prodoct information from serializer...
+            try:
+                Product.objects.update_product(serializer.data)
+            except ProductMisMatch as e:
+                logger.error(e)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
