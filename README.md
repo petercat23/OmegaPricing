@@ -14,4 +14,6 @@ some of the basic testing concepts you might be looking for (mocking requests to
 #### Notes
 
 Specific notes can be found as comments inside the code. The `requests` Library is always a huge help
-when making external API calls. I am a huge fan of Django Rest Framework and the Mock libraries.
+when making external API calls. I am a huge fan of Django Rest Framework and the Mock libraries. For the
+purposes of this demo I am just logging to the console. Normally I would log to a file or to an external tool
+like loggly or something.
